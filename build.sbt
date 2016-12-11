@@ -13,7 +13,11 @@ lazy val akkaVersion = "2.4.11"
 libraryDependencies += "com.typesafe.akka" %% "akka-http-core" % akkaVersion
 libraryDependencies += "com.typesafe.akka" %% "akka-http-experimental" % akkaVersion
 libraryDependencies += "com.typesafe.akka" %% "akka-slf4j" % akkaVersion
-libraryDependencies ++= Seq(ws)
+libraryDependencies += "org.jsoup" % "jsoup" % "1.10.1"
+libraryDependencies ++= Seq(
+  ws
+)
+
 
 libraryDependencies += "org.scalatestplus.play" %% "scalatestplus-play" % "1.5.1" % Test
 libraryDependencies += "com.typesafe.akka" %% "akka-testkit" % akkaVersion % Test

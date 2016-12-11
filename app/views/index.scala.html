@@ -1,18 +1,13 @@
-@(madFragment: String, mawFragment: String)
+@(muiHead: String, muiBody: String, madFragment: String, mawFragment: String)
 <!DOCTYPE html>
-<html>
+<html lang="de">
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <base href="/" />
-    <link rel="stylesheet" href='@routes.Assets.at("stylesheets/main.css")' />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.0/angular.min.js"></script>
-    <script type='text/javascript' src='@routes.Assets.at("javascripts/app.js")'></script>
+    @Html(muiHead)
   </head>
 
   <body>
     <div class="container" ng-app="app">
-      <root-component message="root"></root-component>
+      @Html(muiBody)
       @Html(madFragment)
       @Html(mawFragment)
     </div>

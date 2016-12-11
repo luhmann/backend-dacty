@@ -3,15 +3,20 @@ package controllers
 import java.net.ConnectException
 import javax.inject._
 
+import org.jsoup.Jsoup
 import play.api.libs.ws._
 import play.api.mvc._
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.Configuration
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.Future
 
 @Singleton
-class HomeController @Inject()(ws: WSClient, executionContext: ExecutionContext, config: Configuration)  extends Controller {
+class HomeController @Inject()(
+                                ws: WSClient,
+                                config: Configuration
+                              )
+  extends Controller {
 
   private type WSMessage = String
 
@@ -21,11 +26,15 @@ class HomeController @Inject()(ws: WSClient, executionContext: ExecutionContext,
 
   def index: Action[AnyContent] = Action.async {
     val response = for {
+      muiFragment <- getBodyOf(config.underlying.getString("frontendFragmentsUrls.mui"))
       madFragment <- getBodyOf(config.underlying.getString("frontendFragmentsUrls.mad"))
       mawFragment <- getBodyOf(config.underlying.getString("frontendFragmentsUrls.maw"))
     } yield {
-      // TODO: load html from filesystem
-      Ok(views.html.index(madFragment, mawFragment))
+      val doc = Jsoup.parse(muiFragment)
+      val muiHead = doc.getElementsByTag("head").toString
+      val muiBody = doc.getElementsByTag("body").toString
+
+      Ok(views.html.index(muiHead, muiBody, madFragment, mawFragment))
     }
 
     response.recover {
@@ -42,6 +51,7 @@ class HomeController @Inject()(ws: WSClient, executionContext: ExecutionContext,
       if (response.status == 200) {
         response.body
       } else {
+        // Fallback is currently to ignore fragment if it is not displayed
         ""
       }
     }
