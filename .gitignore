@@ -6,3 +6,8 @@ target
 /.project
 /.settings
 /RUNNING_PID
+
+# Node stuff
+node_modules
+npm-debug.log
+.DS_Store
